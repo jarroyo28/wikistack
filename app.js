@@ -3,6 +3,7 @@ const app = express();
 const morgan = require("morgan");
 const path = require("path");
 const PORT = 1337;
+const { db } = require("./models");
 
 const layout = require("./views/layout");
 
@@ -20,6 +21,17 @@ app.get("/", (req, res, next) => {
   res.send(layout(""));
 });
 
-app.listen(PORT, () => {
-  console.log(`Listening on PORT ${PORT}`);
+db.authenticate().then(() => {
+  console.log("connected to the database");
 });
+
+// This function is used to initialize and sync our db
+// as well as start the server
+const init = async () => {
+  await db.sync({ force: true });
+  app.listen(PORT, () => {
+    console.log(`Listening on PORT ${PORT}`);
+  });
+};
+
+init();
