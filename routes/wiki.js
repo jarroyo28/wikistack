@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { addPage, wikiPage, main, editPage } = require("../views");
+const { addPage, wikiPage, main, editPage, deletePage } = require("../views");
 const { Page, User } = require("../models");
 
 // For RESTful routing, I'll do GET, POST, PUT, DELETE routes in that order
@@ -46,6 +46,25 @@ router.get("/:slug/edit", async (req, res, next) => {
     const author = await page[0].getAuthor();
     console.log(page);
     res.send(editPage(page[0], author));
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/:slug/delete", async (req, res, next) => {
+  try {
+    const title = req.params.slug;
+    const page = await Page.findAll({
+      where: {
+        slug: title,
+      },
+    });
+    if (page.length === 0) {
+      next();
+    }
+    const author = await page[0].getAuthor();
+    console.log(page);
+    res.send(deletePage(page[0], author));
   } catch (error) {
     next(error);
   }
@@ -104,6 +123,19 @@ router.put("/:slug", async (req, res, next) => {
       }
     );
     res.redirect(`/wiki/${page[0].slug}`);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.delete("/:slug", async (req, res, next) => {
+  try {
+    await Page.destroy({
+      where: {
+        slug: req.params.slug,
+      },
+    });
+    res.redirect("/wiki");
   } catch (error) {
     next(error);
   }
