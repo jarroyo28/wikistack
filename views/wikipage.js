@@ -7,7 +7,7 @@ module.exports = (page, author) =>
       ${page.title}
       <small> (<a href="/wiki/${page.slug}/similar">Similar</a>)</small>
     </h3>
-    <h4>by <a href="PLACEHOLDER-AUTHOR-URL">PLACEHOLDER AUTHOR NAME</a></h4>
+    <h4>by <a href="PLACEHOLDER-AUTHOR-URL">${author.name}</a></h4>
     <hr />
     <div class="page-body">${page.content}</div>
     <hr />

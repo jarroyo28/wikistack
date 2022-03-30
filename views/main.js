@@ -10,11 +10,7 @@ module.exports = (pages) =>
     </form>
     <hr />
     <ul class="list-unstyled">
-      <ul>
-        <li>
-          ${pages.map((page) => {
-            return `<a href=/wiki/${page.slug}>${page.title}</a>`;
-          })}
-        </li>
-      </ul>
+      ${pages.map((page) => {
+        return `<li><a href=/wiki/${page.slug}>${page.title}</a><li>`;
+      })}
     </ul>`);

@@ -36,6 +36,8 @@ const User = db.define("user", {
   },
 });
 
+Page.belongsTo(User, { as: "author" });
+
 Page.beforeValidate((page) => {
   function generateSlug(title) {
     // Removes all non-alphanumeric characters from title
