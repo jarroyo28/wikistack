@@ -4,6 +4,9 @@ const morgan = require("morgan");
 const path = require("path");
 const PORT = 1337;
 const { db } = require("./models");
+const methodOverride = require("method-override");
+
+app.use(methodOverride("_method"));
 
 // Logging middleware
 app.use(morgan("dev"));
@@ -21,6 +24,11 @@ app.use("/users", require("./routes/users"));
 
 app.get("/", (req, res, next) => {
   res.redirect("/wiki");
+});
+
+// 404 Handler
+app.use((req, res, next) => {
+  res.status(404).send("Sorry cant find that page!");
 });
 
 db.authenticate().then(() => {

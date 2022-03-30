@@ -13,6 +13,8 @@
   "dependencies": {
     "express": "^4.17.3",
     "html-template-tag": "^3.2.0",
+    "marked": "^1.2.9",
+    "method-override": "^3.0.0",
     "morgan": "^1.10.0",
     "pg": "^8.7.3",
     "sequelize": "^6.17.0"

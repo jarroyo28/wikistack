@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { addPage, wikiPage, main } = require("../views");
+const { addPage, wikiPage, main, editPage } = require("../views");
 const { Page, User } = require("../models");
 
 // For RESTful routing, I'll do GET, POST, PUT, DELETE routes in that order
@@ -22,8 +22,30 @@ router.get("/:slug", async (req, res, next) => {
         slug: title,
       },
     });
+    if (page.length === 0) {
+      next();
+    }
     const author = await page[0].getAuthor();
     res.send(wikiPage(page[0], author));
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/:slug/edit", async (req, res, next) => {
+  try {
+    const title = req.params.slug;
+    const page = await Page.findAll({
+      where: {
+        slug: title,
+      },
+    });
+    if (page.length === 0) {
+      next();
+    }
+    const author = await page[0].getAuthor();
+    console.log(page);
+    res.send(editPage(page[0], author));
   } catch (error) {
     next(error);
   }
@@ -44,6 +66,44 @@ router.post("/", async (req, res, next) => {
     });
     await page.setAuthor(user);
     res.redirect(`/wiki/${page.slug}`);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.put("/:slug", async (req, res, next) => {
+  try {
+    await Page.update(
+      {
+        title: req.body.title,
+        content: req.body.content,
+        status: req.body.status,
+      },
+      {
+        where: {
+          slug: req.params.slug,
+        },
+      }
+    );
+
+    const page = await Page.findAll({
+      where: {
+        slug: req.params.slug,
+      },
+    });
+
+    await User.update(
+      {
+        name: req.body.name,
+        email: req.body.email,
+      },
+      {
+        where: {
+          id: page[0].authorId,
+        },
+      }
+    );
+    res.redirect(`/wiki/${page[0].slug}`);
   } catch (error) {
     next(error);
   }
