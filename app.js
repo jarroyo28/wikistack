@@ -5,8 +5,6 @@ const path = require("path");
 const PORT = 1337;
 const { db } = require("./models");
 
-const layout = require("./views/layout");
-
 // Logging middleware
 app.use(morgan("dev"));
 
@@ -17,8 +15,12 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+// This will contain all our paths
+app.use("/wiki", require("./routes/wiki"));
+app.use("/users", require("./routes/users"));
+
 app.get("/", (req, res, next) => {
-  res.send(layout(""));
+  res.redirect("/wiki");
 });
 
 db.authenticate().then(() => {
