@@ -36,8 +36,10 @@ const User = db.define("user", {
   },
 });
 
+// Associations
 Page.belongsTo(User, { as: "author" });
 
+// Sequelize Hooks
 Page.beforeValidate((page) => {
   function generateSlug(title) {
     // Removes all non-alphanumeric characters from title

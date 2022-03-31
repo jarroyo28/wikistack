@@ -6,6 +6,8 @@ const PORT = 1337;
 const { db } = require("./models");
 const methodOverride = require("method-override");
 
+// HTML Forms only let you send GET or POST requests, so if we want our Form to be a PUT method
+// We use a library called methodOverride
 app.use(methodOverride("_method"));
 
 // Logging middleware

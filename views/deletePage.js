@@ -5,6 +5,7 @@ module.exports = (page, author) =>
   layout(html`
     <h3>Delete a Page</h3>
     <hr />
+    <!-- The action has the query override, it overrides the POST method with a DELETE method -->
     <form method="POST" action="/wiki/${page.slug}?_method=DELETE">
       <div class="form-group">
         <label for="name" class="col-sm-2 control-label">Author Name</label>
